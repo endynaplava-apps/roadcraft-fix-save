@@ -2,6 +2,8 @@
 
 A simple, user-friendly Windows Forms GUI that patches a RoadCraft map save in-place.
 
+Tool reset your progress with AI route and let you plan it again to complete Build a crane mission on map Washout.
+
 ## Use
 1. Close the game (prevents file lock issues)
 2. Run `RoadCraftSavePatcher.exe`
