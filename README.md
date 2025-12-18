@@ -2,6 +2,8 @@
 
 A simple, user-friendly Windows Forms GUI that patches a RoadCraft map save in-place.
 
+[Download](https://github.com/endynaplava-apps/roadcraft-fix-save/releases/download/main/RoadCraftSavePatcher.zip)
+
 Tool reset your progress with AI route and let you plan it again to complete Build a crane mission on map Washout.
 
 ## Use
