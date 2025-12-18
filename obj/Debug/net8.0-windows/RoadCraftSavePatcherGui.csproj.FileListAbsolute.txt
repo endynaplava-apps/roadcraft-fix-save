@@ -1,0 +1,16 @@
+D:\proj\roacraft\_APP-WF\bin\Debug\net8.0-windows\RoadCraftSavePatcher.exe
+D:\proj\roacraft\_APP-WF\bin\Debug\net8.0-windows\RoadCraftSavePatcher.deps.json
+D:\proj\roacraft\_APP-WF\bin\Debug\net8.0-windows\RoadCraftSavePatcher.runtimeconfig.json
+D:\proj\roacraft\_APP-WF\bin\Debug\net8.0-windows\RoadCraftSavePatcher.dll
+D:\proj\roacraft\_APP-WF\bin\Debug\net8.0-windows\RoadCraftSavePatcher.pdb
+D:\proj\roacraft\_APP-WF\obj\Debug\net8.0-windows\RoadCraftSaveTool.MainForm.resources
+D:\proj\roacraft\_APP-WF\obj\Debug\net8.0-windows\RoadCraftSavePatcherGui.csproj.GenerateResource.cache
+D:\proj\roacraft\_APP-WF\obj\Debug\net8.0-windows\RoadCraftSavePatcherGui.GeneratedMSBuildEditorConfig.editorconfig
+D:\proj\roacraft\_APP-WF\obj\Debug\net8.0-windows\RoadCraftSavePatcherGui.AssemblyInfoInputs.cache
+D:\proj\roacraft\_APP-WF\obj\Debug\net8.0-windows\RoadCraftSavePatcherGui.AssemblyInfo.cs
+D:\proj\roacraft\_APP-WF\obj\Debug\net8.0-windows\RoadCraftSavePatcherGui.csproj.CoreCompileInputs.cache
+D:\proj\roacraft\_APP-WF\obj\Debug\net8.0-windows\RoadCraftSavePatcher.dll
+D:\proj\roacraft\_APP-WF\obj\Debug\net8.0-windows\refint\RoadCraftSavePatcher.dll
+D:\proj\roacraft\_APP-WF\obj\Debug\net8.0-windows\RoadCraftSavePatcher.pdb
+D:\proj\roacraft\_APP-WF\obj\Debug\net8.0-windows\RoadCraftSavePatcherGui.genruntimeconfig.cache
+D:\proj\roacraft\_APP-WF\obj\Debug\net8.0-windows\ref\RoadCraftSavePatcher.dll

@@ -1,0 +1,5 @@
+D:\proj\roacraft\_APP-WF\bin\Release\net8.0-windows\publish\RoadCraftSavePatcher.exe
+D:\proj\roacraft\_APP-WF\bin\Release\net8.0-windows\publish\RoadCraftSavePatcher.dll
+D:\proj\roacraft\_APP-WF\bin\Release\net8.0-windows\publish\RoadCraftSavePatcher.deps.json
+D:\proj\roacraft\_APP-WF\bin\Release\net8.0-windows\publish\RoadCraftSavePatcher.runtimeconfig.json
+D:\proj\roacraft\_APP-WF\bin\Release\net8.0-windows\publish\RoadCraftSavePatcher.pdb
