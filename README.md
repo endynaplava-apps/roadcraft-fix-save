@@ -4,7 +4,7 @@ A simple, user-friendly Windows Forms GUI that patches a RoadCraft map save in-p
 
 [Download](https://github.com/endynaplava-apps/roadcraft-fix-save/releases/download/main/RoadCraftSavePatcher.zip)
 
-Tool reset your progress with AI route and let you plan it again to complete Build a crane mission on map Washout.
+Tool reset your progress with AI route and let you plan it again to complete Build a crane mission on map Washout. It affects only state of AI route. Your save file wont be changed anyhow. However the tool will still backup your own save file, just for safety. 
 
 ## Use
 1. Close the game (prevents file lock issues)
