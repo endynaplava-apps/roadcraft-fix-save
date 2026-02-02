@@ -57,6 +57,63 @@ internal static class MapPatcher
 }
 """;
 
+    private const string Map07_RouteTask31_ValueJson = """
+{
+  "$type": "RequestEstablishSaveDesc",
+  "isFinished": false,
+  "issuedRewardCount": 0,
+  "routeSaveDesc": {
+    "nodes": [
+      {
+        "x": -73.9090805053711,
+        "y": 18.295509338378906,
+        "z": 524.65966796875
+      }
+    ],
+    "isNew": true,
+    "isConnected": false
+  },
+  "trafficSaveDesc": {
+    "regularConvoySaveDesc": {
+      "isRunning": false,
+      "isPioneer": false,
+      "isStucked": false,
+      "isMalfunction": false,
+      "activeLifeControllerDescs": [],
+      "preterminatedLifeControllerDescs": [],
+      "timeToSendNext": 481.0
+    },
+    "objectiveConvoySaveDesc": {
+      "$type": "ObjectiveConvoySaveDesc",
+      "isRunning": false,
+      "isPioneer": false,
+      "isStucked": false,
+      "isMalfunction": false,
+      "activeLifeControllerDescs": [],
+      "preterminatedLifeControllerDescs": [],
+      "timeToSendNext": 0.0,
+      "isValid": false,
+      "lastAiIndex": -1,
+      "passedTrucksCount": -1
+    },
+    "wasObjectiveAttached": true,
+    "retrySaveDesc": {
+      "borderIndex": 2147483647,
+      "stateBorderIndex": 2147483647,
+      "passedPoses": [],
+      "passedRotations": []
+    },
+    "stuckPos": null,
+    "stuckReason": 2,
+    "stuckWayTrail": []
+  },
+  "firstBuildingMalfunction": false,
+  "secondBuildingMalfunction": false,
+  "isProgressed": false,
+  "isClientSave": false
+}
+""";
+
     public static void PatchBuildCraneEstablish(string inputMapFile, string outputMapFile)
     {
         PatchJsonProperty(
@@ -69,7 +126,18 @@ internal static class MapPatcher
 
         Console.WriteLine("OK: patched Establish_Task_Build_Crane (request-system).");
     }
+    public static void PatchMap07RouteTask31(string inputMapFile, string outputMapFile)
+    {
+        PatchJsonProperty(
+            inputMapFile: inputMapFile,
+            outputMapFile: outputMapFile,
+            blockSelector: "request-system",
+            propName: "Route_Task_31_Construction_of_a_special_warehouse_stage",
+            valueJson: Map07_RouteTask31_ValueJson
+        );
 
+        Console.WriteLine("OK: patched Route_Task_31_Construction_of_a_special_warehouse_stage (request-system).");
+    }
     public static void PatchJsonProperty(string inputMapFile, string outputMapFile, string blockSelector, string propName, string valueJson)
     {
         var ssf = SsfCodec.Decode(inputMapFile);

@@ -13,14 +13,21 @@ public sealed class MainForm : Form
     private readonly CheckBox _chkBackup = new() { Text = "Create backup (.bak_yyyyMMdd_HHmmss) before overwrite", Checked = true, AutoSize = true };
     private readonly TextBox _txtLog = new() { Multiline = true, ReadOnly = true, ScrollBars = ScrollBars.Vertical, Dock = DockStyle.Fill };
     private readonly RadioButton _rbPatchBce = new() { Text = "Patch Map: infrastructure.request-system → Establish_Task_Build_Crane (Build Crane)", Checked = true, AutoSize = true };
-
+    private readonly RadioButton _rbPatchMap07Route31 = new()
+    {
+        Text = "Patch Map: infrastructure.request-system → Route_Task_31_Construction_of_a_special_warehouse_stage (Toxic Waste storage)",
+        AutoSize = true
+    };
     public MainForm()
     {
         Text = "RoadCraft Save Patcher";
         Width = 860;
         Height = 540;
         StartPosition = FormStartPosition.CenterScreen;
-
+        _rbPatchBce.Checked = false;
+        _rbPatchMap07Route31.Checked = false;
+        _rbPatchBce.CheckedChanged += (_, __) => UpdateActionLog();
+        _rbPatchMap07Route31.CheckedChanged += (_, __) => UpdateActionLog();
         var root = new TableLayoutPanel
         {
             Dock = DockStyle.Fill,
@@ -48,6 +55,7 @@ public sealed class MainForm : Form
         var actionBox = new GroupBox { Text = "Action", Dock = DockStyle.Top, AutoSize = true, Padding = new Padding(12) };
         var actionLayout = new FlowLayoutPanel { Dock = DockStyle.Fill, AutoSize = true, FlowDirection = FlowDirection.TopDown, WrapContents = false };
         actionLayout.Controls.Add(_rbPatchBce);
+        actionLayout.Controls.Add(_rbPatchMap07Route31);
         actionBox.Controls.Add(actionLayout);
 
         // Controls row
@@ -70,14 +78,60 @@ public sealed class MainForm : Form
         _btnBrowse.Click += (_, __) => BrowseFile();
         _btnProcess.Click += async (_, __) => await ProcessAsync();
 
-        AppendLog("1) Click Browse… and select a RoadCraft save file.");
-        AppendLog("example: C:\\Users\\<YOU>\\AppData\\Local\\Saber\\RoadCraftGame\\storage\\steam\\user\\<STEAM_ID>\\Main\\save\\SLOT_0");
-        AppendLog("2) Select file: rb_map_08_contamination");
-        AppendLog("3) Click Process to patch and overwrite the selected file (backup optional).");
+        UpdateActionLog();
+    }
+    private void UpdateActionLog()
+    {
+        ClearLog();
+
+        if (_rbPatchBce.Checked)
+        {
+            AppendLog("Selected action:");
+            AppendLog("→ Map 08 – Build Crane (Establish_Task_Build_Crane)");
+            AppendLog("");
+            AppendLog("1) Click Browse and select:");
+            AppendLog("example: C:\\Users\\<YOU>\\AppData\\Local\\Saber\\RoadCraftGame\\storage\\steam\\user\\<STEAM_ID>\\Main\\save\\SLOT_0");
+            AppendLog("Select file:   rb_map_08_contamination");
+            AppendLog("");
+            AppendLog("2) Click Process to apply the patch.");
+            AppendLog("   The original file will be overwritten");
+            AppendLog("   (backup is created if enabled).");
+        }
+        else if (_rbPatchMap07Route31.Checked)
+        {
+            AppendLog("Selected action:");
+            AppendLog("→ Map 07 – Toxic waste facility (Construction of a special warehouse)");
+            AppendLog("");
+            AppendLog("1) Click Browse and select:");
+            AppendLog("example: C:\\Users\\<YOU>\\AppData\\Local\\Saber\\RoadCraftGame\\storage\\steam\\user\\<STEAM_ID>\\Main\\save\\SLOT_0");
+            AppendLog("Select file:   rb_map_07_rail_failure");
+            AppendLog("");
+            AppendLog("2) Click Process to replace:");
+            AppendLog("   The original file will be overwritten");
+            AppendLog("   (backup is created if enabled).");
+        }
+        else
+        {
+            AppendLog("No action selected.");
+            AppendLog("");
+            AppendLog("Please select an action first:");
+            AppendLog("• Map 08 – Build Crane");
+            AppendLog("• Map 07 – Toxic waste facility");
+        }
+
         AppendLog("");
         AppendLog("Tip: Close the game before patching to avoid file lock errors.");
     }
+    private void ClearLog()
+    {
+        if (InvokeRequired)
+        {
+            BeginInvoke(new Action(ClearLog));
+            return;
+        }
 
+        _txtLog.Clear();
+    }
     private void BrowseFile()
     {
         using var ofd = new OpenFileDialog
@@ -102,18 +156,40 @@ public sealed class MainForm : Form
         if (ofd.ShowDialog(this) == DialogResult.OK)
         {
             _txtFile.Text = ofd.FileName;
-            AppendLog($"Selected: {ofd.FileName}");
+            var fn = Path.GetFileName(ofd.FileName).ToLowerInvariant();
+            if (fn.Contains("rb_map_08_contamination"))
+                _rbPatchBce.Checked = true;
+            else if (fn.Contains("rb_map_07_rail_failure"))
+                _rbPatchMap07Route31.Checked = true;
+
+            // refresh instructions (will ClearLog inside)
+            UpdateActionLog();
         }
     }
 
     private async Task ProcessAsync()
     {
+        ClearLog();
+
         var path = _txtFile.Text?.Trim();
         if (string.IsNullOrWhiteSpace(path) || !File.Exists(path))
         {
+            AppendLog("ERROR: Please select an existing file first.");
             MessageBox.Show(this, "Please select an existing file first.", "Missing file", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;
         }
+
+        if (!_rbPatchBce.Checked && !_rbPatchMap07Route31.Checked)
+        {
+            AppendLog("ERROR: No action selected.");
+            MessageBox.Show(this, "Please select an action first.", "No action selected", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
+
+        AppendLog("Processing started…");
+        AppendLog($"File: {path}");
+        AppendLog(_chkBackup.Checked ? "Backup: enabled" : "Backup: disabled");
+        AppendLog("");
 
         SetUiEnabled(false);
 
@@ -123,15 +199,17 @@ public sealed class MainForm : Form
             {
                 if (_rbPatchBce.Checked)
                     PatchBuildCraneEstablishInPlace(path, createBackup: _chkBackup.Checked);
-                else
-                    throw new InvalidOperationException("No action selected.");
+                else if (_rbPatchMap07Route31.Checked)
+                    PatchMap07Route31InPlace(path, createBackup: _chkBackup.Checked);
             });
 
+            AppendLog("");
             AppendLog("SUCCESS: File was patched and overwritten.");
             MessageBox.Show(this, "Done! Save file was patched successfully.", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         catch (Exception ex)
         {
+            AppendLog("");
             AppendLog("ERROR: " + ex.Message);
             MessageBox.Show(this, ex.ToString(), "Patch failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
@@ -141,6 +219,34 @@ public sealed class MainForm : Form
         }
     }
 
+    private void PatchMap07Route31InPlace(string inputFile, bool createBackup)
+    {
+        var dir = Path.GetDirectoryName(inputFile) ?? "";
+        var name = Path.GetFileName(inputFile);
+        var tmp = Path.Combine(dir, name + ".tmp");
+
+        try { if (File.Exists(tmp)) File.Delete(tmp); } catch { }
+
+        AppendLogThreadSafe($"Patching Map07 Route31 (temp): {tmp}");
+        MapPatcher.PatchMap07RouteTask31(inputFile, tmp);
+
+        if (!File.Exists(tmp) || new FileInfo(tmp).Length < 16)
+            throw new InvalidDataException("Patch produced an invalid temp output file.");
+
+        if (createBackup)
+        {
+            var backup = Path.Combine(dir, name + $".bak_{DateTime.Now:yyyyMMdd_HHmmss}");
+            AppendLogThreadSafe($"Replacing original (backup): {backup}");
+            File.Replace(tmp, inputFile, backup, ignoreMetadataErrors: true);
+            AppendLogThreadSafe($"Backup created: {backup}");
+        }
+        else
+        {
+            AppendLogThreadSafe("Overwriting original (no backup) …");
+            File.Copy(tmp, inputFile, overwrite: true);
+            try { File.Delete(tmp); } catch { }
+        }
+    }
     private void PatchBuildCraneEstablishInPlace(string inputFile, bool createBackup)
     {
         var dir = Path.GetDirectoryName(inputFile) ?? "";
@@ -180,6 +286,7 @@ public sealed class MainForm : Form
         _btnProcess.Enabled = enabled;
         _chkBackup.Enabled = enabled;
         _rbPatchBce.Enabled = enabled;
+        _rbPatchMap07Route31.Enabled = enabled;
     }
 
     private void AppendLog(string line)
