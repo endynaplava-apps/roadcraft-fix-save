@@ -6,6 +6,11 @@ A simple, user-friendly Windows Forms GUI that patches a RoadCraft map save in-p
 
 Tool reset your progress with AI route and let you plan it again to complete Build a crane mission on map Washout OR Toxic Waste facility on map Contamination. It affects only state of AI route. Your save file wont be changed anyhow. However the tool will still backup your own save file, just for safety. 
 
+`rb_map_08_contamination` - save file with this name is for map Washout
+`rb_map_07_rail_failure` - save file with this name is for map Contamination
+
+.... Yeah it doesn't give a sense, ask DEVS why they did it
+
 ## Use
 1. Close the game (prevents file lock issues)
 2. Run `RoadCraftSavePatcher.exe`
